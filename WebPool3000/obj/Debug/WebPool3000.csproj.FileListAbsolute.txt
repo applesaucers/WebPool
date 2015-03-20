@@ -1,0 +1,8 @@
+C:\Users\Kevin\Documents\Visual Studio 2013\Projects\WebPool3000\WebPool3000\bin\WebPool3000.dll.config
+C:\Users\Kevin\Documents\Visual Studio 2013\Projects\WebPool3000\WebPool3000\bin\WebPool3000.dll
+C:\Users\Kevin\Documents\Visual Studio 2013\Projects\WebPool3000\WebPool3000\bin\WebPool3000.pdb
+C:\Users\Kevin\Documents\Visual Studio 2013\Projects\WebPool3000\WebPool3000\obj\Debug\WebPool3000.dll
+C:\Users\Kevin\Documents\Visual Studio 2013\Projects\WebPool3000\WebPool3000\obj\Debug\WebPool3000.pdb
+C:\Users\Kevin\Documents\Visual Studio 2013\Projects\WebPool3000\WebPool3000\obj\Debug\WebPool3000.csprojResolveAssemblyReference.cache
+C:\Users\Kevin\Documents\Visual Studio 2013\Projects\WebPool3000\WebPool3000\obj\Debug\WebPool3000.Properties.Resources.resources
+C:\Users\Kevin\Documents\Visual Studio 2013\Projects\WebPool3000\WebPool3000\obj\Debug\WebPool3000.csproj.GenerateResource.Cache
