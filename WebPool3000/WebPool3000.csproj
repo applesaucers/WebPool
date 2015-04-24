@@ -19,14 +19,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="cannon.demo.js" />
     <Content Include="cannon.js" />
+    <Content Include="libs\dat.gui.js" />
+    <Content Include="libs\Detector.js" />
     <Content Include="index.html" />
-    <Content Include="three.js" />
+    <Content Include="libs\smoothie.js" />
+    <Content Include="libs\Stats.js" />
+    <Content Include="libs\three.js" />
+    <Content Include="libs\TrackballControls.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="three-canvasrenderer.d.ts" />
-    <TypeScriptCompile Include="three.d.ts" />
+    <TypeScriptCompile Include="cannon.demo.d.ts" />
+    <TypeScriptCompile Include="libs\three-canvasrenderer.d.ts" />
+    <TypeScriptCompile Include="libs\three.d.ts" />
     <TypeScriptCompile Include="webpool.ts" />
     <TypeScriptCompile Include="cannon.d.ts" />
   </ItemGroup>

@@ -1,8 +1,9 @@
 ﻿/// <reference path="./cannon.d.ts" />
 /// <amd-dependency path="cannon" />
-/// <reference path="./three-canvasrenderer.d.ts" />
+/// <reference path="./cannon.demo.d.ts" />
+/// <reference path="./libs/three-canvasrenderer.d.ts" />
 /// <amd-dependency path="three" />
-var world, tableBody, timeStep = 1 / 60, poolBallBodies = new Array(15), cueBallBody, scene, camera, renderer, table3d, poolBallMeshes = new Array(15), cueBallMesh;
+var world, tableBody, timeStep = 1 / 60, poolBallBodies = new Array(15), cueBallBody, demo, scene, camera, renderer, table3d, poolBallMeshes = new Array(15), cueBallMesh;
 
 var ballDiameter = 0.054;
 var ballMass = 0.17;
@@ -22,48 +23,65 @@ var tableLengthBumperSize = new CANNON.Vec3(pocketDiameter, sideHeight, fieldLen
 var tableWidthSideSize = new CANNON.Vec3(fieldWidth + pocketDiameter * 2, sideHeight, pocketDiameter);
 var tableLengthSideSize = new CANNON.Vec3(pocketDiameter, sideHeight, fieldLength + pocketDiameter * 4);
 
-var tableBasePos = new CANNON.Vec3(0, ballDiameter / 2 + fieldThickness, 0);
+var tableBasePos = new CANNON.Vec3(0, -ballDiameter - fieldThickness, 0);
 
-var tableLegDistX = fieldWidth / 3;
-var tableLegDistY = tableHeight / 2 + fieldThickness * 1.5 + ballDiameter / 2;
-var tableLegDistZ = fieldLength / 2;
+var tableLegDistX = fieldWidth * 7 / 8;
+var tableLegDistY = tableHeight + fieldThickness * 2 + ballDiameter;
+var tableLegDistZ = fieldLength * 7 / 8;
 var tableLegPos = [
-    new CANNON.Vec3(-tableLegDistX, tableLegDistY, tableLegDistZ),
-    new CANNON.Vec3(tableLegDistX, tableLegDistY, tableLegDistZ),
-    new CANNON.Vec3(-tableLegDistX, tableLegDistY, -tableLegDistZ),
-    new CANNON.Vec3(tableLegDistX, tableLegDistY, -tableLegDistZ)
+    new CANNON.Vec3(-tableLegDistX, -tableLegDistY, tableLegDistZ),
+    new CANNON.Vec3(tableLegDistX, -tableLegDistY, tableLegDistZ),
+    new CANNON.Vec3(-tableLegDistX, -tableLegDistY, -tableLegDistZ),
+    new CANNON.Vec3(tableLegDistX, -tableLegDistY, -tableLegDistZ)
 ];
 
-var tableWidthBumperX = fieldWidth / 4;
-var tableWidthBumperZ = fieldLength / 2 + pocketDiameter * 0.5;
+var tableWidthBumperX = fieldWidth / 2;
+var tableWidthBumperZ = fieldLength + pocketDiameter;
 var tableWidthBumperPos = [
     new CANNON.Vec3(-tableWidthBumperX, 0, tableWidthBumperZ),
     new CANNON.Vec3(tableWidthBumperX, 0, tableWidthBumperZ),
     new CANNON.Vec3(-tableWidthBumperX, 0, -tableWidthBumperZ),
     new CANNON.Vec3(tableWidthBumperX, 0, -tableWidthBumperZ)
 ];
-var tableLengthBumperX = fieldWidth / 2 + pocketDiameter * 0.5;
+var tableLengthBumperX = fieldWidth + pocketDiameter;
 var tableLengthBumperPos = [
     new CANNON.Vec3(-tableLengthBumperX, 0, 0),
     new CANNON.Vec3(tableLengthBumperX, 0, 0)
 ];
 
-var tableWidthSideZ = fieldLength / 2 + pocketDiameter * 1.5;
+var tableWidthSideZ = fieldLength + pocketDiameter * 3;
 var tableWidthSidePos = [
     new CANNON.Vec3(0, 0, -tableWidthSideZ),
     new CANNON.Vec3(0, 0, tableWidthSideZ)
 ];
-var tableLengthSideX = fieldWidth / 2 + pocketDiameter * 1.5;
+var tableLengthSideX = fieldWidth + pocketDiameter * 3;
 var tableLengthSidePos = [
     new CANNON.Vec3(-tableLengthSideX, 0, 0),
     new CANNON.Vec3(tableLengthSideX, 0, 0)
 ];
 
-initThree();
-initCannon();
-document.addEventListener('DOMContentLoaded', domSetup);
+document.addEventListener('DOMContentLoaded', initSim);
+
+function initSim() {
+    initThree();
+    initCannon();
+    domSetup();
+}
+function initDemo() {
+    document.body.innerHTML = '';
+    demo = new CANNON.Demo();
+    demo.addScene('pool', function () {
+        world = demo.getWorld();
+        initCannon();
+        demo.addVisual(tableBody);
+        demo.addVisual(cueBallBody);
+        demo.addVisuals(poolBallBodies);
+    });
+
+    demo.start();
+}
 function initCannon() {
-    world = new CANNON.World();
+    world = world || new CANNON.World();
     world.gravity.set(0, -1, 0);
     world.broadphase = new CANNON.NaiveBroadphase();
 
@@ -74,9 +92,23 @@ function initCannon() {
     });
 
     tableBody.addShape(new CANNON.Box(tableBaseSize), tableBasePos);
+
+    for (var count = 0; count < tableLengthBumperPos.length; count += 1) {
+        tableBody.addShape(new CANNON.Box(tableLengthBumperSize), tableLengthBumperPos[count]);
+    }
+    for (var count = 0; count < tableWidthBumperPos.length; count += 1) {
+        tableBody.addShape(new CANNON.Box(tableWidthBumperSize), tableWidthBumperPos[count]);
+    }
+    for (var count = 0; count < tableLengthSidePos.length; count += 1) {
+        tableBody.addShape(new CANNON.Box(tableLengthSideSize), tableLengthSidePos[count]);
+    }
+    for (var count = 0; count < tableWidthSidePos.length; count += 1) {
+        tableBody.addShape(new CANNON.Box(tableWidthSideSize), tableWidthSidePos[count]);
+    }
+
     world.addBody(tableBody);
 
-    var ball = new CANNON.Sphere(ballDiameter / 2);
+    var ball = new CANNON.Sphere(ballDiameter);
 
     cueBallBody = new CANNON.Body({
         mass: ballMass,
@@ -96,14 +128,14 @@ function initCannon() {
 function makeMesh(size, material, position) {
     var box = new THREE.BoxGeometry(size.x, size.y, size.z);
     var boxMesh = new THREE.Mesh(box, material);
-    boxMesh.position.set(position.x, position.y, position.z);
+    boxMesh.position.set(position.x / 2, -position.y / 2, position.z / 2);
     return boxMesh;
 }
 
 function setPosition(obj3d, body) {
     var position = body.position;
     var quaternion = body.quaternion;
-    obj3d.position.set(position.x, position.y, position.z);
+    obj3d.position.set(position.x / 2, position.y / 2, position.z / 2);
     obj3d.quaternion.set(quaternion.w, quaternion.x, quaternion.y, quaternion.z);
 }
 
@@ -153,7 +185,7 @@ function initThree() {
 
 function domSetup() {
     document.getElementById('camera').addEventListener('click', function (event) {
-        var orientationX = parseFloat(document.getElementById('orientationZ').value), orientationY = parseFloat(document.getElementById('orientationY').value), orientationZ = parseFloat(document.getElementById('orientationZ').value), positionX = parseFloat(document.getElementById('positionX').value), positionY = parseFloat(document.getElementById('positionY').value), positionZ = parseFloat(document.getElementById('positionZ').value);
+        var orientationX = parseFloat(document.getElementById('orientationX').value), orientationY = parseFloat(document.getElementById('orientationY').value), orientationZ = parseFloat(document.getElementById('orientationZ').value), positionX = parseFloat(document.getElementById('positionX').value), positionY = parseFloat(document.getElementById('positionY').value), positionZ = parseFloat(document.getElementById('positionZ').value);
 
         camera.setRotationFromEuler(new THREE.Euler(orientationX, orientationY, orientationZ, 'YXZ'));
         camera.position.set(positionX, positionY, positionZ);
