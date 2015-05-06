@@ -9,11 +9,37 @@
     <script src="cannon.demo.js"></script>
     <script src="libs/dat.gui.js"></script>
     <script src="libs/Three.js"></script>
+    <script src="libs/gl-matrix.js"></script>
     <script src="libs/TrackballControls.js"></script>
     <script src="libs/Detector.js"></script>
     <script src="libs/Stats.js"></script>
     <script src="libs/smoothie.js"></script>
     <script src="webpool.js"></script>
+
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aPosition;
+        attribute vec4 aColor;
+
+        uniform mat4 uBinder;
+        uniform mat4 uPerspective;
+        
+        varying vec4 vColor;
+
+        void main(void) {
+        gl_Position = uPerspective * uBinder * vec4(aPosition, 1.0);
+        vColor = aColor;
+        }
+    </script>
+
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float;
+
+        varying vec4 vColor;
+
+        void main(void) {
+        gl_FragColor = vColor;
+        }
+    </script>
 </head>
 <body>
     camera position: <input type="text" id="positionX" /><input type="text" id="positionY" /><input type="text" id="positionZ" /><br />
@@ -21,6 +47,6 @@
     <button id="camera">apply</button><br />
     angle: <input type="text" id="angle" />
     power: <input type="text" id="power" />
-    <button id="force">apply</button><br />
+    <button id="force">apply</button><button id="reset">reset</button><br />
 </body>
 </html>

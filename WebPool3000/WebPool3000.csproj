@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -24,6 +24,7 @@
     <Content Include="libs\dat.gui.js" />
     <Content Include="libs\Detector.js" />
     <Content Include="index.html" />
+    <Content Include="libs\gl-matrix.js" />
     <Content Include="libs\smoothie.js" />
     <Content Include="libs\Stats.js" />
     <Content Include="libs\three.js" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="cannon.demo.d.ts" />
+    <TypeScriptCompile Include="libs\gl-matrix.d.ts" />
     <TypeScriptCompile Include="libs\three-canvasrenderer.d.ts" />
     <TypeScriptCompile Include="libs\three.d.ts" />
     <TypeScriptCompile Include="webpool.ts" />

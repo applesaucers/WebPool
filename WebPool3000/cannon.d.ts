@@ -414,7 +414,7 @@
         angularVelocity?: Vec3;
         quaternion?: Quaternion;
         mass?: number;
-        material?: number;
+        material?: Material;
         type?: number;
         linearDamping?: number;
 
